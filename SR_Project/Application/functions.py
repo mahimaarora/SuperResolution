@@ -11,18 +11,18 @@ import cv2
 import numpy as np
 import sys
 # sys.path.insert( 0, 'D:\Super-Resolution-master\SR_Project\Application')
-# import cnn
+import cnn
 import moviepy.editor as mp
 import subprocess
 from os.path import isfile, join
 import os, shutil
-# import cnn_image
+import cnn_image
 
 def handle_uploaded_file(testfile):
-    
-    # if the file is a video 
-    file_path = type(testfile)
-    if file_path.endswith('.mp4')
+
+    # if the file is a video
+    # file_path = type(testfile)
+    if testfile.endswith('.mp4'):
 
         # print(testfile)
         #extracting audio from the file
@@ -47,6 +47,9 @@ def handle_uploaded_file(testfile):
         try:
             if not os.path.exists('data'):
                 os.makedirs('data')
+            elif os.path.exists('data'):
+                os.remove('data')
+                os.makedirs('data')
         except OSError:
             print('Error: Creating directory of data')
 
@@ -66,16 +69,18 @@ def handle_uploaded_file(testfile):
 
 
         # When everything done, release the capture
-        clear_media()
+
         cap.release()
         cv2.destroyAllWindows()
 
-        # cnn.process()    
+        cnn.process()
         write_video()
-    
-    elif file_path.endswith('jpeg'):
+
+    elif testfile.endswith('jpeg') or testfile.endswith('jpg') or testfile.endswith('png'):
         cnn_image.process()
         pass
+    else:
+        print('Error!!')
 
 
 def convert_frames_to_video(pathIn,pathOut,fps):
@@ -116,12 +121,12 @@ def write_video():
 
 
 
-def delete_data():
-    if os.path.exists("./data"):
-        os.rmdir("./data")
-    else:
-        print("The file does not exist")
-
+# def delete_data():
+#     if os.path.exists("./data"):
+#         os.rmdir("./data")
+#     else:
+#         print("The file does not exist")
+#
 
 def clear_media():
     folder = './media'
