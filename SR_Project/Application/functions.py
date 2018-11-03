@@ -16,56 +16,66 @@ import moviepy.editor as mp
 import subprocess
 from os.path import isfile, join
 import os, shutil
+# import cnn_image
 
 def handle_uploaded_file(testfile):
+    
+    # if the file is a video 
+    file_path = type(testfile)
+    if file_path.endswith('.mp4')
 
-    print(testfile)
-    #extracting audio from the file
-    # command = "ffmpeg -i testfile -ab 160k -ac 2 -ar 44100 -vn media/audio.mp3"
+        # print(testfile)
+        #extracting audio from the file
+        command = "ffmpeg -i testfile -ab 160k -ac 2 -ar 44100 -vn media/audio.mp3"
 
-    # subprocess.call(command, shell=True)
+        subprocess.call(command, shell=True)
 
-# Playing video from file:
-    cap = cv2.VideoCapture(testfile)
-    # print(type(testfile))
-    try:
-        if os.path.exists('./media/output.mp4'):
-            os.remove('./media/output.mp4')
-    except OSError:
-        print('Output buffer already full with video/output.mp4')
-    try:
-        if os.path.exists('/media/video.mp4'):
-            os.remove('./media/video.mp4')
-    except OSError:
-        print('Output buffer already full with video/output.mp4')
+    # Playing video from file:
+        cap = cv2.VideoCapture(testfile)
+        # print(type(testfile))
+        try:
+            if os.path.exists('./media/output.mp4'):
+                os.remove('./media/output.mp4')
+        except OSError:
+            print('Output buffer already full with video/output.mp4')
+        try:
+            if os.path.exists('/media/video.mp4'):
+                os.remove('./media/video.mp4')
+        except OSError:
+            print('Output buffer already full with video/output.mp4')
 
-    try:
-        if not os.path.exists('data'):
-            os.makedirs('data')
-    except OSError:
-        print('Error: Creating directory of data')
+        try:
+            if not os.path.exists('data'):
+                os.makedirs('data')
+        except OSError:
+            print('Error: Creating directory of data')
 
-    currentFrame = 0
-    while(True):
+        currentFrame = 0
+        while(True):
 
-        # Capture frame-by-frame
-        ret, frame = cap.read()
-        if not ret: break
-        # Saves image of the current frame in jpg file
-        name = './data/frame' + str(currentFrame) + '.png'
-        print('Creating...' + name)
-        cv2.imwrite(name, frame)
+            # Capture frame-by-frame
+            ret, frame = cap.read()
+            if not ret: break
+            # Saves image of the current frame in jpg file
+            name = './data/frame' + str(currentFrame) + '.png'
+            print('Creating...' + name)
+            cv2.imwrite(name, frame)
 
-        # To stop duplicate images
-        currentFrame += 1
+            # To stop duplicate images
+            currentFrame += 1
 
 
-    # When everything done, release the capture
-    clear_media()
-    cap.release()
-    cv2.destroyAllWindows()
-    # cnn.process()    
-    write_video()
+        # When everything done, release the capture
+        clear_media()
+        cap.release()
+        cv2.destroyAllWindows()
+
+        # cnn.process()    
+        write_video()
+    
+    elif file_path.endswith('jpeg'):
+        cnn_image.process()
+        pass
 
 
 def convert_frames_to_video(pathIn,pathOut,fps):
@@ -100,8 +110,8 @@ def write_video():
     pathOut = './media/video.mp4'
     fps = 20
     convert_frames_to_video(pathIn,pathOut,fps)
-    # video = mp.VideoFileClip("./media/video.mp4")
-    # video.write_videofile("./media/output.mp4", audio="./media/audio.mp3")
+    video = mp.VideoFileClip("./media/video.mp4")
+    video.write_videofile("./media/output.mp4", audio="./media/audio.mp3")
 
 
 
