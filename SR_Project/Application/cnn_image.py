@@ -84,7 +84,7 @@ class ImageData(Dataset):
 # In[9]:
 
 
-def process():
+def process(path):
 
     #ds = ImageData()
     #dl = DataLoader(ds, shuffle=False)
@@ -92,7 +92,7 @@ def process():
     model.eval()
     model.load_state_dict(torch.load('data/imagenet/models/sr01.h5', map_location=lambda storage, loc: storage))
 
-    img = cv2.imread('./data'+path)
+    img = cv2.imread(path)
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     img = np.rollaxis(np.array(img), 2, 0)
     img = torch.unsqueeze(torch.Tensor(img), dim=0)
@@ -102,7 +102,7 @@ def process():
     op = op.squeeze()
     op = op.astype(np.int32)
     op = op/255
-    plt.imsave('./data'+path, np.clip(op, 0, 1))
+    plt.imsave('./media/output_image.jpg', np.clip(op, 0, 1))
     print('saved')
 
 
