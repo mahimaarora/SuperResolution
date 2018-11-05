@@ -11,12 +11,12 @@ import cv2
 import numpy as np
 import sys
 # sys.path.insert( 0, 'D:\Super-Resolution-master\SR_Project\Application')
-from . import cnn
+# from . import cnn
 import moviepy.editor as mp
 import subprocess
 from os.path import isfile, join
 import os, shutil
-from . import cnn_image
+# from . import cnn_image
 
 def handle_uploaded_file(testfile):
 
@@ -73,11 +73,11 @@ def handle_uploaded_file(testfile):
         cap.release()
         cv2.destroyAllWindows()
 
-        cnn.process()
+        # cnn.process()
         write_video()
 
     elif testfile.endswith('jpeg') or testfile.endswith('jpg') or testfile.endswith('png'):
-        cnn_image.process()
+        # cnn_image.process()
         pass
     else:
         print('Error!!')

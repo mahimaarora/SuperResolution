@@ -9,7 +9,6 @@ import torch.nn as nn
 import math
 from torch.utils.data import Dataset, DataLoader
 import os
-from fastai.conv_learner import *
 import matplotlib.pyplot as plt
 
 
