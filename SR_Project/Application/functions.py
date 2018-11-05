@@ -11,12 +11,12 @@ import cv2
 import numpy as np
 import sys
 # sys.path.insert( 0, 'D:\Super-Resolution-master\SR_Project\Application')
-import cnn
+from . import cnn
 import moviepy.editor as mp
 import subprocess
 from os.path import isfile, join
 import os, shutil
-import cnn_image
+from . import cnn_image
 
 def handle_uploaded_file(testfile):
 
