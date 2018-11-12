@@ -11,12 +11,18 @@ import cv2
 import numpy as np
 import sys
 # sys.path.insert( 0, 'D:\Super-Resolution-master\SR_Project\Application')
-import cnn
+from .cnn import *
+
+# from . import cnn
+
 import moviepy.editor as mp
 import subprocess
 from os.path import isfile, join
 import os, shutil
-import cnn_image
+import subprocess
+
+from .cnn_image import process as p_
+# from . import cnn_imag
 
 def handle_uploaded_file(testfile):
 
@@ -26,7 +32,7 @@ def handle_uploaded_file(testfile):
 
         # print(testfile)
         #extracting audio from the file
-        command = "ffmpeg -i testfile -ab 160k -ac 2 -ar 44100 -vn media/audio.mp3"
+        command = "ffmpeg -i " + testfile + " -ab 160k -ac 2 -ar 44100 -vn media/audio.mp3"
 
         subprocess.call(command, shell=True)
 
@@ -34,13 +40,13 @@ def handle_uploaded_file(testfile):
         cap = cv2.VideoCapture(testfile)
         # print(type(testfile))
         try:
-            if os.path.exists('./media/output.mp4'):
-                os.remove('./media/output.mp4')
+            if os.path.exists('media/output.mp4'):
+                os.remove('media/output.mp4')
         except OSError:
             print('Output buffer already full with video/output.mp4')
         try:
-            if os.path.exists('/media/video.mp4'):
-                os.remove('./media/video.mp4')
+            if os.path.exists('media/video.mp4'):
+                os.remove('media/video.mp4')
         except OSError:
             print('Output buffer already full with video/output.mp4')
 
@@ -48,10 +54,10 @@ def handle_uploaded_file(testfile):
             if not os.path.exists('data'):
                 os.makedirs('data')
             elif os.path.exists('data'):
-                os.remove('data')
+                shutil.rmtree('data')
                 os.makedirs('data')
         except OSError:
-            print('Error: Creating directory of data')
+            print('data nahi ban rha')
 
         currentFrame = 0
         while(True):
@@ -73,11 +79,16 @@ def handle_uploaded_file(testfile):
         cap.release()
         cv2.destroyAllWindows()
 
-        cnn.process()
+
+        process()
         write_video()
 
+        clear_command = 'find . -name "data/*.png" -type f -delete'
+        subprocess.call(clear_command, shell=True)
+
     elif testfile.endswith('jpeg') or testfile.endswith('jpg') or testfile.endswith('png'):
-        cnn_image.process()
+        p_(testfile)
+
         pass
     else:
         print('Error!!')
@@ -100,7 +111,7 @@ def convert_frames_to_video(pathIn,pathOut,fps):
         #inserting the frames into an image array
         frame_array.append(img)
 
-    out = cv2.VideoWriter(pathOut, 0x00000021, fps, size)
+    out = cv2.VideoWriter(pathOut, cv2.VideoWriter_fourcc(*'DIVX'), fps, size)
 
     for i in range(len(frame_array)):
         # writing to a image array
@@ -111,12 +122,12 @@ def convert_frames_to_video(pathIn,pathOut,fps):
 
 
 def write_video():
-    pathIn= './data/'
-    pathOut = './media/video.mp4'
-    fps = 20
+    pathIn= 'data/'
+    pathOut = 'media/video.mp4'
+    fps = 25
     convert_frames_to_video(pathIn,pathOut,fps)
-    video = mp.VideoFileClip("./media/video.mp4")
-    video.write_videofile("./media/output.mp4", audio="./media/audio.mp3")
+    video = mp.VideoFileClip("media/video.mp4")
+    video.write_videofile("media/output.mp4", audio="media/audio.mp3")
 
 
 
@@ -129,7 +140,7 @@ def write_video():
 #
 
 def clear_media():
-    folder = './media'
+    folder = 'media'
     for the_file in os.listdir(folder):
         file_path = os.path.join(folder, the_file)
         try:

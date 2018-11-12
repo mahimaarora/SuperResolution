@@ -9,9 +9,9 @@ import torch.nn as nn
 import math
 from torch.utils.data import Dataset, DataLoader
 import os
-from fastai.conv_learner import *
 import matplotlib.pyplot as plt
-
+import cv2
+import numpy as np
 
 # In[2]:
 
@@ -85,14 +85,14 @@ class ImageData(Dataset):
 
 
 def process():
-    paths = os.listdir('./data/')
+    paths = os.listdir('data/')
     #ds = ImageData()
     #dl = DataLoader(ds, shuffle=False)
     model = SRNet(4).cuda()
     model.eval()
-    model.load_state_dict(torch.load('data/imagenet/models/sr01.h5', map_location=lambda storage, loc: storage))
+    model.load_state_dict(torch.load('Application/data/imagenet/models/sr01.h5', map_location=lambda storage, loc: storage))
     for path in paths:
-        img = cv2.imread('data'+path)
+        img = cv2.imread('data/'+path)
         img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         img = np.rollaxis(np.array(img), 2, 0)
         img = torch.unsqueeze(torch.Tensor(img), dim=0)
@@ -102,7 +102,7 @@ def process():
         op = op.squeeze()
         op = op.astype(np.int32)
         op = op/255
-        plt.imsave('./data'+path, np.clip(op, 0, 1))
+        plt.imsave('data/'+path, np.clip(op, 0, 1))
         print('saved')
 
 

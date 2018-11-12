@@ -9,8 +9,10 @@ import torch.nn as nn
 import math
 from torch.utils.data import Dataset, DataLoader
 import os
-from fastai.conv_learner import *
 import matplotlib.pyplot as plt
+import cv2
+import numpy as np
+
 
 
 # In[2]:
@@ -90,7 +92,9 @@ def process(path):
     #dl = DataLoader(ds, shuffle=False)
     model = SRNet(4).cuda()
     model.eval()
-    model.load_state_dict(torch.load('data/imagenet/models/sr01.h5', map_location=lambda storage, loc: storage))
+    print(os.getcwd())
+    model.load_state_dict(torch.load('Application/data/imagenet/models/sr01.h5', map_location=lambda storage, loc: storage))
+
 
     img = cv2.imread(path)
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
